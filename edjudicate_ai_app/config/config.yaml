@@ -1,0 +1,86 @@
+# Edjudicate AI Configuration File
+# This file contains all configuration settings for the Edjudicate AI project
+
+# API Keys and Authentication
+# IMPORTANT: Replace with your actual API keys before running the application
+gemini_api_key: "AIzaSyDUqL50Vut-fTcXTnWynJDNFgweDHt6niA"  # Required: Google Gemini API key for LLM reasoning
+openai_api_key: "YOUR_OPENAI_API_KEY_HERE"  # Optional: OpenAI API key (currently not used but available for future use)
+
+# Model Configuration
+models:
+  # Gemini model configuration
+  gemini:
+    model_name: "gemini-2.0-flash"  # Gemini model version to use
+    temperature: 0.1                # Controls randomness in responses (0.0 = deterministic, 1.0 = very random)
+    max_tokens: 4096               # Maximum tokens in response
+    
+  # Embedding model configuration
+  embeddings:
+    model_name: "all-MiniLM-L6-v2" # SentenceTransformers model for text embeddings
+    embedding_dimension: 384        # Dimension of the embedding vectors
+
+# Text Processing Configuration
+text_processing:
+  chunking:
+    chunk_size: 500                # Size of text chunks for processing
+    chunk_overlap: 50              # Overlap between consecutive chunks
+    
+# Vector Database Configuration
+vector_db:
+  faiss:
+    index_type: "IndexFlatIP"      # FAISS index type (Inner Product for cosine similarity)
+    normalize_embeddings: true     # Whether to normalize embeddings for cosine similarity
+    
+# Retrieval Configuration
+retrieval:
+  default_k: 5                     # Default number of chunks to retrieve for each query
+  similarity_threshold: 0.7        # Minimum similarity score for chunk retrieval
+
+# Server Configuration
+server:
+  host: "127.0.0.1"               # Server host
+  port: 8000                      # Server port
+  debug: false                    # Debug mode
+  cors_origins: ["*"]             # CORS allowed origins
+  
+# UI Configuration
+ui:
+  title: "Edjudicate AI - Your Own Policy Explainer"
+  api_url: "http://127.0.0.1:8000" # Backend API URL for Streamlit frontend
+  max_file_size_mb: 50            # Maximum file upload size in MB
+  supported_file_types: ["pdf", "docx"]  # Supported file types for upload
+
+# Storage Configuration
+storage:
+  data_directory: "data"           # Base directory for storing session data
+  temp_uploads_directory: "temp_uploads"  # Directory for temporary file uploads
+  session_prefix: "session_"       # Prefix for session directory names
+  backup_directory: "backup"       # Subdirectory name for storing FAISS index and chunks
+
+# Logging Configuration
+logging:
+  level: "INFO"                   # Logging level (DEBUG, INFO, WARNING, ERROR)
+  file: "logs/edjudicate_ai.log"    # Log file path
+  max_file_size: "10MB"           # Maximum log file size
+  backup_count: 5                 # Number of backup log files to keep
+
+# Session Management
+session:
+  cleanup_after_days: 30          # Number of days after which to clean up old sessions
+  auto_cleanup: true              # Whether to automatically clean up old sessions
+
+# Performance Configuration
+performance:
+  max_concurrent_requests: 10     # Maximum number of concurrent API requests
+  request_timeout: 300            # Request timeout in seconds
+  
+# Security Configuration
+security:
+  max_upload_files: 10            # Maximum number of files that can be uploaded per session
+  allowed_file_extensions: [".pdf", ".docx"]  # Allowed file extensions
+  
+# Feature Flags
+features:
+  enable_multi_file_upload: true  # Enable uploading multiple files in one session
+  enable_session_history: false   # Enable session history (future feature)
+  enable_analytics: false         # Enable usage analytics (future feature)
