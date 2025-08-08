@@ -329,21 +329,21 @@ if uploaded_files:
         session_id = data.get("session_id")
         st.session_state["session_id"] = session_id
             
-            st.markdown(f"""
+        st.markdown(f"""
             <div class="success-message">
                 ✅ {data.get("message", "Upload succeeded!")}
             </div>
             """, unsafe_allow_html=True)
             
             # Session Badge
-            st.markdown(f"""
+        st.markdown(f"""
             <div style="margin: 1rem 0;">
                 <span class="session-badge">
                     🗂️ Session ID: {session_id}
                 </span>
             </div>
             """, unsafe_allow_html=True)
-        else:
+    else:
             st.markdown(f"""
             <div class="error-message">
                 ❌ {response.json().get("error", "Upload failed.")}
