@@ -124,11 +124,11 @@ Mermaid Diagram : [EdjudicateAI](EdjudicateAI.svg)
 
 ## 👨‍💻 Team
 
-**Developer**: Anand Kumar
+**Developer**: Kunal sharma
 **Hackathon**: Bajaj Finserv Hackathon 2025
 
 ---
 
 ## 📬 Contact
 
-Feel free to connect via [LinkedIn](https://linkedin.com/in/anand-kumar05) or email at: [anandambastha72@gmail.com](anandambastha72@gmail.com)
+Feel free to connect via [LinkedIn](https://www.linkedin.com/in/kunal8s) or email at: [kunalsharmakunu09@gmail.com](kunalsharmakunu09@gmail.com)
