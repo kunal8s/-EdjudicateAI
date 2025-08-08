@@ -8,6 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
-config/
+config/config.yaml
 ui/app.txt
 data/docs/
