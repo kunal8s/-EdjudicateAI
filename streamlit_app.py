@@ -25,7 +25,7 @@ def load_config():
     except:
         # Fallback configuration for deployment
         return {
-            "gemini_api_key": st.secrets.get("GEMINI_API_KEY", "your-api-key-here"),
+            "gemini_api_key": st.secrets.get("GEMINI_API_KEY", "AIzaSyDT8DEp3Bzf72E9dCdrDzqUw39EDXuYn-E"),
             "models": {
                 "gemini": {"model_name": "gemini-2.0-flash"},
                 "embeddings": {"model_name": "all-MiniLM-L6-v2"}
@@ -602,3 +602,4 @@ st.markdown("""
     Powered by Edjudicate AI
 </div>
 """, unsafe_allow_html=True)
+

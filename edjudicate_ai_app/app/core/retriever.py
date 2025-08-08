@@ -3,7 +3,7 @@ import numpy as np
 import faiss
 import pickle
 import yaml
-from app.core.embedder import embed_texts
+from edjudicate_ai_app.app.core.embedder import embed_texts
 from datetime import datetime
 
 

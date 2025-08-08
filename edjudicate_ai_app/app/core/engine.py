@@ -1,12 +1,24 @@
 import google.generativeai as genai
 import yaml
 import json
-from app.core.retriever import retrieve_chunks
+import os
+from edjudicate_ai_app.app.core.retriever import retrieve_chunks
 
-with open("config/config.yaml") as f:
-    cfg = yaml.safe_load(f)
+api_key = None
+try:
+    with open("config/config.yaml") as f:
+        cfg = yaml.safe_load(f)
+        api_key = cfg.get("gemini_api_key")
+except Exception:
+    api_key = None
 
-genai.configure(api_key=cfg["gemini_api_key"])
+if not api_key:
+    api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    raise RuntimeError("Gemini API key not configured. Set config/config.yaml or GEMINI_API_KEY env var.")
+
+genai.configure(api_key=api_key)
 
 model = genai.GenerativeModel("gemini-2.0-flash")
 
@@ -63,3 +75,28 @@ def evaluate_decision(query, session_id):
     
     
 #
+
+
+QA_PROMPT = """
+You are a helpful policy QA assistant. Using ONLY the provided policy excerpts, answer the user's question concisely in 1-3 sentences.
+
+- If the answer cannot be found in the excerpts, respond exactly with: Information not found in the provided document.
+- Do not include any disclaimers, markdown, or extra formatting.
+
+Question:
+{question}
+
+Policy Excerpts:
+{clauses}
+"""
+
+def answer_question(question: str, session_id: str, k: int = 5) -> str:
+    """Answer a question using retrieved chunks from the FAISS index for the given session.
+
+    Returns plain text suitable for the HackRx expected `answers` array.
+    """
+    retrieved_chunks = retrieve_chunks(question, session_id, k=k)
+    clauses = "\n\n".join(retrieved_chunks)
+    prompt = QA_PROMPT.format(question=question, clauses=clauses)
+    response = model.generate_content(prompt)
+    return response.candidates[0].content.parts[0].text

@@ -1,13 +1,16 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from app.core.retriever import retrieve_chunks, build_index
-from app.core.engine import evaluate_decision
-from app.ingestion.load import load_content
-from app.ingestion.chunk import chunk_text
+from edjudicate_ai_app.app.core.retriever import retrieve_chunks, build_index
+from edjudicate_ai_app.app.core.engine import evaluate_decision, answer_question
+from edjudicate_ai_app.app.ingestion.load import load_content
+from edjudicate_ai_app.app.ingestion.chunk import chunk_text
 from typing import List
 from datetime import datetime
 import os
+import tempfile
+import requests
+import fitz
 
 app = FastAPI(
     title="Edjudicate AI",
@@ -89,3 +92,67 @@ async def upload_docs(uploaded_files: List[UploadFile] = File(...)):
     except Exception as e:
         return {"error": str(e)}
 
+class HackRxRequest(BaseModel):
+    documents: str
+    questions: List[str]
+
+
+def _download_pdf_to_temp(url: str) -> str:
+    resp = requests.get(url, timeout=20)
+    if resp.status_code != 200:
+        raise HTTPException(status_code=400, detail=f"Failed to download document. Status: {resp.status_code}")
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        tmp.write(resp.content)
+        tmp_path = tmp.name
+    # Validate PDF
+    try:
+        with fitz.open(tmp_path) as _:
+            pass
+    except Exception:
+        os.unlink(tmp_path)
+        raise HTTPException(status_code=400, detail="Downloaded file is not a valid PDF")
+    return tmp_path
+
+
+def _index_single_pdf(temp_pdf_path: str, session_id: str):
+    raw_text = load_content(temp_pdf_path)
+    text_chunks = chunk_text(raw_text)
+    build_index(text_chunks, session_id, force_rebuild=True)
+
+
+def _bearer_token(auth_header: str | None) -> str:
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing or invalid Authorization header")
+    token = auth_header.split(" ", 1)[1].strip()
+    expected = os.getenv("HACKRX_API_KEY")
+    if expected and token != expected:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    return token
+
+
+@app.post("/hackrx/run")
+@app.post("/api/v1/hackrx/run")
+def hackrx_run(payload: HackRxRequest, Authorization: str | None = Header(default=None)):
+    _ = _bearer_token(Authorization)
+
+    session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    temp_pdf = _download_pdf_to_temp(payload.documents)
+    try:
+        _index_single_pdf(temp_pdf, session_id)
+    finally:
+        try:
+            os.unlink(temp_pdf)
+        except Exception:
+            pass
+
+    answers: List[str] = []
+    for q in payload.questions:
+        try:
+            ans = answer_question(q, session_id, k=5)
+        except Exception:
+            ans = "Information not found in the provided document."
+        answers.append(ans)
+
+    # Return only the expected field per HackRx spec
+    return {"answers": answers}
