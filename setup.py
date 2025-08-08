@@ -1,0 +1,28 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="edjudicateai",
+    version="0.1.0",
+    description="Edjudicate AI is an intelligent, session-based insurance assistant that combines semantic document retrieval using FAISS with reasoning powered by Gemini 1.5 Flash.",
+    packages=find_packages(include=["edjudicateai*"]),
+    install_requires=[
+        "docx>=0.2.4",
+        "faiss-cpu>=1.11.0.post1",
+        "fastapi>=0.116.1",
+        "google-generativeai>=0.8.5",
+        "langchain>=0.3.26",
+        "numpy>=2.3.1",
+        "openai>=1.97.1",
+        "pandas>=2.3.1",
+        "pydantic>=2.11.7",
+        "pymupdf>=1.26.3",
+        "python-docx>=1.2.0",
+        "python-multipart>=0.0.20",
+        "sentence-transformers>=5.0.0",
+        "streamlit>=1.47.1",
+        "tiktoken>=0.9.0",
+        "unstructured>=0.18.9",
+        "uvicorn>=0.35.0",
+    ],
+    python_requires=">=3.12",
+)

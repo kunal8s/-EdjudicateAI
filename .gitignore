@@ -7,37 +7,7 @@ wheels/
 *.egg-info
 
 # Virtual environments
-.venv/
-venv/
-env/
-edjudicate_env/
-verisure_env/
-
-# Configuration files with sensitive data
-config/config.yaml
-
-# Data directories
-data/
-temp_uploads/
-logs/
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Streamlit
-.streamlit/secrets.toml
-
-# Temporary files
-*.tmp
-*.log
-*.bak
-
-# UI development files
+.venv
+config/
 ui/app.txt
+data/docs/

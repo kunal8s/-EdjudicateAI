@@ -3,11 +3,11 @@ import numpy as np
 import faiss
 import pickle
 import yaml
-from edjudicate_ai_app.app.core.embedder import embed_texts
+from app.core.embedder import embed_texts
 from datetime import datetime
 
 
-with open("edjudicate_ai_app/config/config.yaml") as f:
+with open("config/config.yaml") as f:
     cfg = yaml.safe_load(f)
 
 def get_paths(session_id):

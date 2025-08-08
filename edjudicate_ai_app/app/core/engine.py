@@ -1,9 +1,9 @@
 import google.generativeai as genai
 import yaml
 import json
-from edjudicate_ai_app.app.core.retriever import retrieve_chunks
+from app.core.retriever import retrieve_chunks
 
-with open("edjudicate_ai_app/config/config.yaml") as f:
+with open("config/config.yaml") as f:
     cfg = yaml.safe_load(f)
 
 genai.configure(api_key=cfg["gemini_api_key"])

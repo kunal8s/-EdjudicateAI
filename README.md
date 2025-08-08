@@ -27,7 +27,6 @@ Problem Statement : [HackRx6.0](https://hackrx.in/#problem-statement)
 * **Semantic Clause Search**: Questions retrieve the most relevant document chunks
 * **Structured Decision Output**: Gemini responds with a JSON decision object
 * **Streamlit Frontend**: Easy-to-use UI for upload and querying
-* **Modern Dark Theme**: Beautiful, professional interface with gradients and animations
 
 ---
 
@@ -80,61 +79,8 @@ project/
 │   └── session_<id>/index/  # Saved FAISS index + chunks
 ├── config/
 │   └── config.yaml          # API keys and settings
-├── streamlit_app.py         # Main Streamlit app for deployment
-├── requirements.txt         # Python dependencies
-├── packages.txt             # System dependencies
-└── .streamlit/
-    └── config.toml          # Streamlit configuration
 ```
-
----
-
-## 🚀 Deployment
-
-### Streamlit Cloud Deployment
-
-This application is configured for easy deployment on Streamlit Cloud:
-
-1. **Fork/Clone** this repository
-2. **Connect** to Streamlit Cloud
-3. **Deploy** automatically
-
-#### Required Environment Variables
-
-Set these in your Streamlit Cloud deployment:
-
-```bash
-# Required: Google Gemini API key
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Optional: Backend API URL (if using external backend)
-API_URL=https://your-backend-url.com
-```
-
-#### Deployment Files
-
-- `streamlit_app.py` - Main Streamlit application
-- `requirements.txt` - Python dependencies
-- `packages.txt` - System dependencies
-- `.streamlit/config.toml` - Streamlit configuration
-
-### Local Development
-
-```bash
-# 1. Clone the repository
-git clone <repository-url>
-cd VeriSure-AI-main
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Set environment variables
-export GEMINI_API_KEY="your_api_key_here"
-
-# 4. Run the application
-streamlit run streamlit_app.py
-```
-
+Mermaid Diagram : [EdjudicateAI](EdjudicateAI.svg)
 ---
 
 ## 🔍 Sample Output
